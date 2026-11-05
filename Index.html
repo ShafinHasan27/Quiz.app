@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz app</title>
+  <style>
+    /*style oart edited by Ai*/
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.question,
+.option,
+.result {
+  width: 100%;
+  max-width: 500px;
+}
+
+.question {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #334155;
+}
+
+#question {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.option {
+  background: #1e293b;
+  padding: 20px 25px;
+}
+
+#option {
+  list-style: none;
+}
+
+#option li {
+  background: #334155;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid transparent;
+}
+
+#option li:hover {
+  background: #475569;
+  border-color: #38bdf8;
+  transform: translateX(4px);
+}
+
+.result {
+  background: #1e293b;
+  padding: 10px 25px 20px;
+  min-height: 55px;
+}
+
+#feedback {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#next {
+  width: 100%;
+  max-width: 500px;
+  padding: 14px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #38bdf8;
+  color: #0f172a;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#next:hover {
+  background: #0ea5e9;
+  transform: translateY(-2px);
+    }
+  </style>
+</head><body>
+<div class="question">
+  <p id="question"></p>
+</div>
+<div class="option">
+  <ul id="option">
+    
+  </ul>
+</div>
+<div class="result">
+  <p id="feedback"></p>
+</div>
+<button id="next" onclick="nextQuestion()">Next</button>
+<script>
+  const questionArr=[
+  {question: "What does JSON.stringify() do?",
+    options: ["Convert to string", "Convert to object", "Delete data"],
+    answer: 0
+  },
+  {
+    question: "What does JSON.parse() do?",
+    options: ["Save data", "Convert string to object", "Delete data"],
+    answer: 1
+  },
+  {
+    question: "What does localStorage.getItem() return if key is missing?",
+    options: ["null", "undefined", "0"],
+    answer: 0
+  }
+]
+  let currentIndex=0;
+  let score=0;
+  let answered=false;
+  function showQuestion(index){
+    const question=document.getElementById("question");
+    question.textContent=questionArr[index].question;
+    const optionArr=questionArr[index].options;
+    let html="";
+    for(let i=0;i<optionArr.length;i++){
+      html+=`<li id="option${i}" onclick="checkAnswer(${i})">${optionArr[i]}</li>`
+      }
+    document.getElementById("option").innerHTML=html;
+    }
+  showQuestion(currentIndex);
+  function checkAnswer(i){
+    if(answered===true){ return; } 
+    else {
+    const feedback=document.getElementById("feedback");
+      answered=true;
+    if(i===questionArr[currentIndex].answer){
+      feedback.textContent="correct"
+      feedback.style.color="green";
+      score+=1;
+      
+      }else{
+    feedback.textContent="wrong";
+    feedback.style.color="red";
+      }
+    }
+    }
+  function nextQuestion(){
+   if(currentIndex===questionArr.length){
+     restartAll();
+     document.getElementById("next").textContent="Next";
+     showQuestion(currentIndex);
+     return;
+   } if(answered===false){
+     document.getElementById("feedback").textContent="Please choose an answer";
+     document.getElementById("feedback").style.color="orange";
+     return;
+   }
+     answered=false;
+    currentIndex+=1;
+    document.getElementById("feedback").textContent="";
+    if(currentIndex===questionArr.length){
+      document.getElementById("question").textContent=`Score: ${score} / ${questionArr.length}`;
+      document.getElementById("option").textContent="";
+      document.getElementById("next").textContent="Restart"
+      return;
+      }
+    showQuestion(currentIndex)
+     
+    }
+  function restartAll(){
+    currentIndex=0;
+    score=0;
+    answered=false;
+  }
+</script>
+</body>
+  </html>
